@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image to PNG Converter - Multi-Tools</title>
+    <meta name="description" content="Convert your images to PNG format online. Free, fast, and easy to use image converter.">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="/styles/main.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header will be loaded here -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="container py-4">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1><i class="fas fa-image"></i> Image to PNG Converter</h1>
+                <p class="tool-description">Convert your images to PNG format online. Supports JPG, JPEG, GIF, BMP, and other image formats.</p>
+            </div>
+
+            <!-- Tool Interface -->
+            <div class="tool-interface">
+                <div class="row">
+                    <div class="col-md-8 mx-auto">
+                        <div class="card">
+                            <div class="card-body">
+                                <form id="converterForm">
+                                    <div class="mb-4">
+                                        <label for="imageInput" class="form-label">Select Image</label>
+                                        <input type="file" class="form-control" id="imageInput" accept="image/*" required>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <label class="form-label">Image Preview</label>
+                                        <div id="imagePreview" class="text-center p-3 border rounded">
+                                            <img id="preview" class="img-fluid d-none" alt="Preview">
+                                            <p class="text-muted mb-0">Preview will appear here</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label for="quality" class="form-label">PNG Quality</label>
+                                        <input type="range" class="form-range" id="quality" min="1" max="100" value="90">
+                                        <div class="d-flex justify-content-between">
+                                            <small>Lower Quality</small>
+                                            <small>Higher Quality</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-primary btn-lg">
+                                            <i class="fas fa-download"></i> Convert to PNG
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How to Use Section -->
+            <div class="how-to-use mt-5">
+                <h3>How to Use</h3>
+                <ol class="list-group list-group-numbered">
+                    <li class="list-group-item">Select an image file using the file input above</li>
+                    <li class="list-group-item">Adjust the PNG quality if needed</li>
+                    <li class="list-group-item">Click the "Convert to PNG" button</li>
+                    <li class="list-group-item">Download your converted PNG image</li>
+                </ol>
+            </div>
+
+            <!-- Features Section -->
+            <div class="features mt-5">
+                <h3>Features</h3>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5><i class="fas fa-bolt"></i> Fast Conversion</h5>
+                                <p>Convert your images to PNG format in seconds</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5><i class="fas fa-lock"></i> Secure</h5>
+                                <p>Your images are processed locally and never uploaded to our servers</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5><i class="fas fa-mobile-alt"></i> Mobile Friendly</h5>
+                                <p>Works perfectly on all devices and screen sizes</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ad Section -->
+        <div class="ad-section my-4">
+            <div class="row">
+                <div class="col-12">
+                    <div class="ad-container text-center p-3 bg-light">
+                        <!-- Ad space will be added here -->
+                        <p class="text-muted">Advertisement Space</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer will be loaded here -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="/js/main.js"></script>
+    <!-- Tool-specific JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageInput = document.getElementById('imageInput');
+            const preview = document.getElementById('preview');
+            const converterForm = document.getElementById('converterForm');
+
+            // Preview image before conversion
+            imageInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        preview.src = e.target.result;
+                        preview.classList.remove('d-none');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Handle form submission
+            converterForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const file = imageInput.files[0];
+                if (!file) {
+                    alert('Please select an image first');
+                    return;
+                }
+
+                // Create a canvas element
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+
+                img.onload = function() {
+                    // Set canvas dimensions
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+
+                    // Draw image on canvas
+                    ctx.drawImage(img, 0, 0);
+
+                    // Convert to PNG
+                    const quality = document.getElementById('quality').value / 100;
+                    const pngData = canvas.toDataURL('image/png', quality);
+
+                    // Create download link
+                    const link = document.createElement('a');
+                    link.download = 'converted-image.png';
+                    link.href = pngData;
+                    link.click();
+                };
+
+                img.src = URL.createObjectURL(file);
+            });
+        });
+    </script>
+</body>
+</html> 
